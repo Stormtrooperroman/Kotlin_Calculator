@@ -5,282 +5,266 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.Button
+import androidx.constraintlayout.widget.Group
 import kotlin.math.pow
+import kotlin.math.round
 
 class MainActivity : AppCompatActivity() {
 
-    var ten: Double=10.0
-    var lastNumeric: Boolean = false
-    var stateError: Boolean = false
-    var lastDot: Boolean = false
-    var lastPercent:Boolean=false
-    var plus_minus: Boolean=false
-    var val1: Double=0.0;
-    var val2: Double=0.0;
-    var val3: Double=0.0;
-    var colDot: Int=0;
-    var useVal1:Boolean=false
-    var useVal2:Boolean=false
-    var useVal3:Boolean=false
-    var plus:Boolean=false
-    var minus: Boolean=false
-    var mul: Boolean=false
-    var div: Boolean=false
-    var sum: Boolean=false
-    var len:Int=0
+    private var numbers = ArrayList<Double>()
+    private var operationsList = ArrayList<String>()
+    private var ten: Double=10.0
+    private var lastNumeric: Boolean = false
+    private var plusMinus: Boolean = false
+    private var lastDot: Boolean = false
+    private var lastPercent:Boolean=false
+    private var valOne: Double=0.0
+    private var valTwo: Double=0.0
+    private var valThree: Double=0.0
+    private var colDot: Int=0
+    private var useOtherVal:Boolean=false
+    private var plusNew:Boolean=false
+    private var minusNew: Boolean=false
+    private val plus:String="+"
+    private val minus:String="-"
+    private val dot:String="."
+    private val percent:String="%"
+    private val mul: String="x"
+    private val div: String="÷"
+    private var sum: Boolean=false
+    private var value: Double=0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        equal.setOnClickListener{
-
-            if((mul || div) && (plus || minus)){
-                if(div){
-                    val2/=val3
-                    val3=0.0
-                    useVal3=false
-                    div=false
-                    if(plus){
-                        val1+=val2
-                        useVal2=false
-                        val2=0.0
-                        plus=false
-                    }
-                    else if(minus){
-                        val1-=val2
-                        useVal2=false
-                        val2=0.0
-                        minus=false
-                    }
-                }
-                if(mul){
-                    val2*=val3
-                    val3=0.0
-                    useVal3=false
-                    mul=false
-                    if(plus){
-                        val1+=val2
-                        useVal2=false
-                        val2=0.0
-                        plus=false
-                    }
-                    else if(minus){
-                        val1-=val2
-                        useVal2=false
-                        val2=0.0
-                        minus=false
-                    }
-                }
+        val digits: Group = findViewById(R.id.digits)
+        equalButton.setOnClickListener{
+            numbers.add(value)
+            if(operationsList.size!=0) {
+                findAns()
             }
-            else if(mul || div){
-                if(div) {
-                    val1 /= val2
-                    val2 = 0.0
-                    useVal2 = false
-                    div=false
-                }
-                if(mul) {
-                    val1 *= val2
-                    val2 = 0.0
-                    useVal2 = false
-                    mul=false
-                }
+            else{
+                output(numbers[0])
             }
-            else if(plus || minus){
-                if(plus){
-                    val1+=val2
-                    useVal2=false
-                    val2=0.0
-                    plus=false
-                }
-                else if(minus){
-                    val1-=val2
-                    useVal2=false
-                    val2=0.0
-                    minus=false
-                }
 
-
-            }
-            output.text = val1.toString()
             sum=true
         }
-    }
 
-    fun onDigit(view: View) {
-        if (stateError || sum) {
-            output.text=""
-            val1 = (view as Button).text.toString().toDouble()
-            sum=false
-            stateError = false
-            useVal1=true
-            output.append((view as Button).text)
-        }
-        else if(!lastPercent && !plus_minus){
-            if (output.text.toString().length+1<13){
-                if (!lastNumeric && !useVal1) {
-                    val1 = (view as Button).text.toString().toDouble()
-                    useVal1 = true
-                } else if (lastNumeric && !useVal2 && !lastDot) {
+        percentBtn.setOnClickListener {
 
-                    val1 = val1 * 10 + (view as Button).text.toString().toDouble()
-                    useVal1 = true
-
-                } else if (!lastNumeric && !useVal2 && lastDot) {
-                    val1 += (view as Button).text.toString().toDouble() * ten.pow(-1 * colDot)
-                    colDot++
-                    useVal1 = true
-                } else if (!lastDot && ((plus || minus) && !(div || mul)) || (!(plus || minus) && (div || mul))) {
-                    val2 = val2 * 10 + (view as Button).text.toString().toDouble()
-                    useVal2 = true
-                } else if (lastDot && !lastNumeric && ((plus || minus) && !(div || mul)) || (!(plus || minus) && (div || mul))) {
-                    val2 += (view as Button).text.toString().toDouble() * ten.pow(-1 * colDot)
-                    colDot++
-                    useVal2 = true
-                } else if (!lastDot && ((plus || minus) && (div || mul))) {
-                    val3 = val3 * 10 + (view as Button).text.toString().toDouble()
-                    useVal3 = true
-                } else if (lastDot && !lastNumeric && ((plus || minus) && (div || mul))) {
-                    val3 += (view as Button).text.toString().toDouble() * ten.pow(-1 * colDot)
-                    colDot++
-                    useVal3 = true
-                }
-
-                output.append((view as Button).text)
+            if(lastNumeric&& !lastDot || plusMinus || sum){
+                value /=100
+                lastPercent=true
+                lastDot=false
+                lastNumeric=false
+                numbers.clear()
+                operationsList.clear()
+                outputTextView.append(percent)
+                sum=false
             }
-
+        }
+        plusMinusBtn.setOnClickListener {
+            if(sum){
+                lastDot=false
+                lastNumeric=false
+                lastPercent=false
+                numbers.clear()
+                operationsList.clear()
+                sum=false
+                value*=-1
+                outputTextView.text="-(" + outputTextView.text.toString()+")"
+                plusMinus=true
+                lastNumeric = false
+                lastDot = false
+                lastPercent=false
+                colDot=0
+            }
+            else if(lastNumeric&& !lastDot || lastPercent){
+                value*=-1
+                outputTextView.text="-(" + outputTextView.text.toString()+")"
+                plusMinus=true
+                lastNumeric = false
+                lastDot = false
+                lastPercent=false
+                colDot=0
+            }
 
         }
 
-        lastNumeric = true
-        lastPercent=false
-    }
-
-    fun onOperator(view: View) {
-        if ((lastNumeric || plus_minus) && !stateError &&(output.text.toString().length+1<12)) {
-            if(mul || div){
-                if (mul && !useVal3){
-                    val1*=val2
-                    val2=0.0
-                    useVal2=false
-                    mul=false
-                }
-                else if(div && !useVal3){
-
-                    val1/=val2
-                    val2=0.0
-                    useVal2=false
-                    div=false
-                }
-                else if(div && useVal3){
-                    val2/=val3
-                    val3=0.0
-                    useVal3=false
-                    div=false
-                }
-                else if(mul && useVal3){
-                    val2/=val3
-                    val3=0.0
-                    useVal3=false
-                    mul=false
-                }
+        digits.setAllOnClickListener(View.OnClickListener {
+            if(sum){
+                lastDot=false
+                lastNumeric=false
+                lastPercent=false
+                numbers.clear()
+                operationsList.clear()
+                outputTextView.text=""
+                value=(it as Button).text.toString().toDouble()
+                outputTextView.append(it.text)
+                lastNumeric = true
+                sum=false
             }
-            if("x"==(view as Button).text.toString()){
-                mul=true
-                output.append("⋅")
-                plus_minus=false
-
+            else if(lastDot && !plusMinus && !lastPercent){
+                value+= (it as Button).text.toString().toDouble() * ten.pow(-1 * colDot)
+                colDot++
+                outputTextView.append(it.text)
+                lastNumeric = true
             }
-            else if("÷"==(view as Button).text.toString()){
-                output.append("/")
-                div=true
-                plus_minus=false
+            else if(lastNumeric && !plusMinus && !lastPercent){
+                value = value * 10 + (it as Button).text.toString().toDouble()
+                outputTextView.append(it.text)
+                lastNumeric = true
             }
-            if(!mul && !div){
-                if (plus){
-
-                    val1+=val2
-                    val2=0.0
-                    useVal2=false
-                    plus=false
-                }
-                else if(minus){
-                    val1-=val2
-                    val2=0.0
-                    useVal2=false
-                    minus=false
-                }
-            }
-            if("+"==(view as Button).text.toString()){
-                plus=true
-                output.append((view as Button).text)
-                plus_minus=false
-            }
-            else if("-"==(view as Button).text.toString()){
-                minus=true
-                output.append((view as Button).text)
-                plus_minus=false
-            }
-            else if("+/-"==(view as Button).text.toString()){
-                val1*=-1
-                output.text="-(" + output.text.toString()+")"
-                plus_minus=true
+            else if(!lastNumeric && !lastDot && !lastPercent && !plusMinus){
+                value=(it as Button).text.toString().toDouble()
+                outputTextView.append(it.text)
+                lastNumeric = true
             }
 
-            sum=false
+        })
+        operations.setAllOnClickListener(View.OnClickListener {
+            if(sum){
+                sum=false
+                numbers.clear()
+                operationsList.clear()
+            }
+            numbers.add(value)
+            outputTextView.text=""
+            operationsList.add((it as Button).text.toString())
             lastNumeric = false
             lastDot = false
             lastPercent=false
+            plusMinus=false
             colDot=0
+            value=0.0
+            sum=false
+        })
+
+        commaButton.setOnClickListener {
+            if(!lastDot && lastNumeric){
+                outputTextView.append(dot)
+                lastNumeric = false
+                lastDot = true
+                colDot=1
+            }
+        }
+        ACButton.setOnClickListener {
+            lastDot=false
+            lastNumeric=false
+            lastPercent=false
+            useOtherVal=false
+            plusNew=false
+            minusNew=false
+            plusMinus=false
+            valOne=0.0
+            valTwo=0.0
+            valThree=0.0
+            value=0.0
+            numbers.clear()
+            operationsList.clear()
+            outputTextView.text=""
         }
     }
-    fun onClear(view: View){
-        output.text=""
-        lastNumeric = false
-        lastDot = false
-        stateError=false
-        val1=0.0
-        val2=0.0
-        val3=0.0
-        useVal2=false
-        useVal1=false
-        useVal3=false
-        plus=false
-        minus=false
-        div=false
-        mul=false
-        lastPercent=false
-        plus_minus=false
-        sum=false
-        colDot=0
+
+    private fun muvAndDiv(operator:String){
+        if (operator==mul && !useOtherVal){
+            valOne*=valTwo
+            valTwo=0.0
+        }
+        else if(operator==div && !useOtherVal){
+
+            valOne/=valTwo
+            valTwo=0.0
+        }
+        else if(operator==div && useOtherVal){
+            valThree/=valTwo
+            valTwo=0.0
+
+        }
+        else if(operator==mul && useOtherVal){
+            valThree*=valTwo
+            valTwo=0.0
+        }
     }
 
-    fun addDot(view: View){
-        if (lastNumeric && !stateError && !lastDot && !sum) {
-            output.append(".")
-            lastNumeric = false
-            lastDot = true
-            colDot=1
+    private fun  sumAndMinus(operator:String){
+        positionSum()
+        if (operator==plus){
+            valOne+=valTwo
+            valTwo=0.0
+        }
+        else if(operator==minus){
+            valOne-=valTwo
+            valTwo=0.0
+        }
+    }
+    private fun positionSum(){
+        if(plusNew){
+            valOne+=valThree
+            valThree=0.0
+            useOtherVal=false
+            plusNew=false
+        }
+        else if(minusNew){
+            valOne-=valThree
+            valThree=0.0
+            useOtherVal=false
+            minusNew=false
+        }
+    }
+    private fun findAns(){
+        valOne=numbers[0]
+
+        for (i in 0..operationsList.size-2) {
+            valTwo=numbers[i+1]
+            if(operationsList[i]==mul || operationsList[i]==div){
+                muvAndDiv(operationsList[i])
+            }
+            else if(operationsList[i+1]!=mul && operationsList[i+1]!=div && (operationsList[i]==plus || operationsList[i]==minus)){
+                sumAndMinus(operationsList[i])
+            }
+            else if((operationsList[i+1]==mul || operationsList[i+1]==div) && operationsList[i]==plus){
+                valThree=valTwo
+                useOtherVal=true
+                plusNew=true
+            }
+            else if((operationsList[i+1]==mul || operationsList[i+1]==div) && operationsList[i]==minus){
+                valThree=valTwo
+                useOtherVal=true
+                minusNew=true
+            }
+
+        }
+        if(operationsList[operationsList.size-1]==plus || operationsList[operationsList.size-1]==minus){
+            valTwo=numbers[operationsList.size]
+            sumAndMinus(operationsList[operationsList.size-1])
         }
 
+        else if(operationsList[operationsList.size-1]!=mul || operationsList[operationsList.size-1]!=div){
+            valTwo=numbers[operationsList.size]
+            muvAndDiv(operationsList[operationsList.size-1])
+        }
+        positionSum()
+
+
+        output(valOne)
     }
-    fun percent(view: View){
-        if(lastNumeric){
-            if(!useVal2 && !lastDot){
-                val1 /=100
-            }
-            else if(!lastDot && ((plus || minus) && !(div || mul)) || (!(plus || minus) && (div || mul))){
-                val2 /=100
 
-            }
-            else if(!lastDot && ((plus || minus) && (div || mul))){
+    private fun output(ans:Double){
+        val longAns=ans.toLong()
+        value=ans
+        if(ans==longAns.toDouble()){
+            outputTextView.text=longAns.toString()
+        }
+        else{
 
-                val3 /=100
+            outputTextView.text=ans.toString()
+        }
+    }
 
-            }
-            lastPercent=true
-            output.append("%")
-
+    private fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
+        referencedIds.forEach { id ->
+            rootView.findViewById<View>(id).setOnClickListener(listener)
         }
     }
 

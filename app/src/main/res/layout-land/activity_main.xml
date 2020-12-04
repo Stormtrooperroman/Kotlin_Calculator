@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whisper"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/outputTextView"
+        android:layout_width="684dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/round_text"
+        android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
+        android:paddingStart="20dp"
+        android:paddingTop="23dp"
+        android:paddingEnd="20dp"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/ACButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/cosButton"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/cos"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintEnd_toStartOf="@+id/ACButton"
+        app:layout_constraintTop_toBottomOf="@+id/outputTextView" />
+
+    <Button
+        android:id="@+id/sinButton"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/sin"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSeven"
+        app:layout_constraintTop_toBottomOf="@+id/cosButton" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/operations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="divBtn,plusButton,minusButton,mulBtn" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/digits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="buttonOne,buttonFive,buttonSeven,buttonFour,buttonNine,buttonSix,buttonTwo,buttonZero,buttonEight,buttonThree" />
+
+    <Button
+        android:id="@+id/buttonSeven"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_7"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonFour"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEight" />
+
+    <Button
+        android:id="@+id/commaButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/comma"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonZero" />
+
+    <Button
+        android:id="@+id/buttonFour"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_4"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonOne"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFive" />
+
+    <Button
+        android:id="@+id/buttonThree"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_3"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/commaButton"
+        app:layout_constraintStart_toEndOf="@+id/buttonTwo" />
+
+    <Button
+        android:id="@+id/plusButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/plus"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:backgroundTint="@color/chambray"
+        app:layout_constraintBottom_toTopOf="@+id/equalButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonThree" />
+
+    <Button
+        android:id="@+id/minusButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/minus"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:backgroundTint="@color/chambray"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonSix" />
+
+    <Button
+        android:id="@+id/buttonTwo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_2"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonZero"
+        app:layout_constraintStart_toEndOf="@+id/buttonOne" />
+
+    <Button
+        android:id="@+id/buttonSix"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_6"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonThree"
+        app:layout_constraintStart_toEndOf="@+id/buttonFive" />
+
+    <Button
+        android:id="@+id/buttonZero"
+        android:layout_width="115dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_0"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/commaButton" />
+
+    <Button
+        android:id="@+id/buttonOne"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_1"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonZero"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTwo" />
+
+    <Button
+        android:id="@+id/buttonNine"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_9"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSix"
+        app:layout_constraintStart_toEndOf="@+id/buttonEight" />
+
+    <Button
+        android:id="@+id/mulBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/x"
+        android:textColor="@color/white"
+        android:textSize="29sp"
+        app:backgroundTint="@color/chambray"
+        app:layout_constraintBottom_toTopOf="@+id/minusButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonNine" />
+
+    <Button
+        android:id="@+id/equalButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/equal"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:backgroundTint="@color/chambray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/commaButton" />
+
+    <Button
+        android:id="@+id/buttonFive"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_5"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTwo"
+        app:layout_constraintStart_toEndOf="@+id/buttonFour" />
+
+    <Button
+        android:id="@+id/buttonEight"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/_8"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonFive"
+        app:layout_constraintStart_toEndOf="@+id/buttonSeven" />
+
+    <Button
+        android:id="@+id/ACButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/ac"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSeven"
+        app:layout_constraintEnd_toStartOf="@+id/plusMinusBtn" />
+
+    <Button
+        android:id="@+id/plusMinusBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/plus_minus"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEight"
+        app:layout_constraintStart_toEndOf="@+id/ACButton" />
+
+    <Button
+        android:id="@+id/percentBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/percent"
+        android:textColor="@color/chambray"
+        android:textSize="29sp"
+        app:backgroundTint="@color/cream"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNine"
+        app:layout_constraintStart_toEndOf="@+id/plusMinusBtn" />
+
+    <Button
+        android:id="@+id/divBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/round_button"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/div"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        app:backgroundTint="@color/chambray"
+        app:layout_constraintBottom_toTopOf="@+id/mulBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/percentBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,4 +20,6 @@
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="equal">=</string>
+    <string name="cos">Cos</string>
+    <string name="sin">Sin</string>
 </resources>
