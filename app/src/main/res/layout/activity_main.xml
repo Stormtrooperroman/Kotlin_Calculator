@@ -33,7 +33,7 @@
         android:paddingTop="23dp"
         android:paddingEnd="20dp"
         android:textSize="35sp"
-        app:layout_constraintBottom_toTopOf="@+id/ACButton"
+        app:layout_constraintBottom_toTopOf="@+id/acButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Group
@@ -214,7 +214,7 @@
         app:layout_constraintStart_toEndOf="@+id/buttonZero" />
 
     <Button
-        android:id="@+id/ACButton"
+        android:id="@+id/acButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="24dp"
@@ -241,7 +241,7 @@
         android:textSize="29sp"
         app:backgroundTint="@color/cream"
         app:layout_constraintBottom_toTopOf="@+id/buttonEight"
-        app:layout_constraintStart_toEndOf="@+id/ACButton" />
+        app:layout_constraintStart_toEndOf="@+id/acButton" />
 
     <Button
         android:id="@+id/percentBtn"

@@ -25,14 +25,18 @@ class MainActivity : AppCompatActivity() {
     private var useOtherVal:Boolean=false
     private var plusNew:Boolean=false
     private var minusNew: Boolean=false
-    private val plus:String="+"
-    private val minus:String="-"
-    private val dot:String="."
-    private val percent:String="%"
-    private val mul: String="x"
-    private val div: String="÷"
     private var sum: Boolean=false
     private var value: Double=0.0
+    private var lastRandom:Boolean=false
+
+    enum class OperationsArray(val oper: String){
+        Plus("+"),
+        Minus("-"),
+        Mul("x"),
+        Div("÷"),
+        Dot("."),
+        Percent("%")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +53,41 @@ class MainActivity : AppCompatActivity() {
 
             sum=true
         }
+        if (randButton != null) {
+            randButton.setOnClickListener {
+                if(sum){
+                    lastDot=false
+                    lastNumeric=false
+                    lastPercent=false
+                    numbers.clear()
+                    operationsList.clear()
+                    outputTextView.text=""
+                    value=((0..100000).random()).toDouble()
+                    outputTextView.append(value.toInt().toString())
+                    sum=false
+                    lastRandom=true
+                }
+                else if(!lastNumeric && !lastDot && !lastRandom){
+                    value=((0..100000).random()).toDouble()
+                    outputTextView.append(value.toInt().toString())
+                    lastRandom=true
+                }
+            }
+        }
+
 
         percentBtn.setOnClickListener {
 
-            if(lastNumeric&& !lastDot || plusMinus || sum){
+            if(lastNumeric&& !lastDot || plusMinus || sum || lastRandom){
                 value /=100
                 lastPercent=true
                 lastDot=false
                 lastNumeric=false
                 numbers.clear()
                 operationsList.clear()
-                outputTextView.append(percent)
+                outputTextView.append(OperationsArray.Percent.oper)
                 sum=false
+                lastRandom=false
             }
         }
         plusMinusBtn.setOnClickListener {
@@ -78,8 +105,9 @@ class MainActivity : AppCompatActivity() {
                 lastDot = false
                 lastPercent=false
                 colDot=0
+                lastRandom=false
             }
-            else if(lastNumeric&& !lastDot || lastPercent){
+            else if(lastNumeric&& !lastDot || lastPercent || lastRandom){
                 value*=-1
                 outputTextView.text="-(" + outputTextView.text.toString()+")"
                 plusMinus=true
@@ -87,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                 lastDot = false
                 lastPercent=false
                 colDot=0
+                lastRandom=false
             }
 
         }
@@ -103,19 +132,20 @@ class MainActivity : AppCompatActivity() {
                 outputTextView.append(it.text)
                 lastNumeric = true
                 sum=false
+                lastRandom=false
             }
-            else if(lastDot && !plusMinus && !lastPercent){
+            else if(lastDot && !plusMinus && !lastPercent && !lastRandom){
                 value+= (it as Button).text.toString().toDouble() * ten.pow(-1 * colDot)
                 colDot++
                 outputTextView.append(it.text)
                 lastNumeric = true
             }
-            else if(lastNumeric && !plusMinus && !lastPercent){
+            else if(lastNumeric && !plusMinus && !lastPercent && !lastRandom){
                 value = value * 10 + (it as Button).text.toString().toDouble()
                 outputTextView.append(it.text)
                 lastNumeric = true
             }
-            else if(!lastNumeric && !lastDot && !lastPercent && !plusMinus){
+            else if(!lastNumeric && !lastDot && !lastPercent && !plusMinus && !lastRandom){
                 value=(it as Button).text.toString().toDouble()
                 outputTextView.append(it.text)
                 lastNumeric = true
@@ -137,22 +167,24 @@ class MainActivity : AppCompatActivity() {
             plusMinus=false
             colDot=0
             value=0.0
+            lastRandom=false
             sum=false
         })
 
         commaButton.setOnClickListener {
             if(!lastDot && lastNumeric){
-                outputTextView.append(dot)
+                outputTextView.append(OperationsArray.Dot.oper)
                 lastNumeric = false
                 lastDot = true
                 colDot=1
             }
         }
-        ACButton.setOnClickListener {
+        acButton.setOnClickListener {
             lastDot=false
             lastNumeric=false
             lastPercent=false
             useOtherVal=false
+            lastRandom=false
             plusNew=false
             minusNew=false
             plusMinus=false
@@ -167,21 +199,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun muvAndDiv(operator:String){
-        if (operator==mul && !useOtherVal){
+        if (operator==OperationsArray.Mul.oper && !useOtherVal){
             valOne*=valTwo
             valTwo=0.0
         }
-        else if(operator==div && !useOtherVal){
+        else if(operator==OperationsArray.Div.oper && !useOtherVal){
 
             valOne/=valTwo
             valTwo=0.0
         }
-        else if(operator==div && useOtherVal){
+        else if(operator==OperationsArray.Div.oper && useOtherVal){
             valThree/=valTwo
             valTwo=0.0
 
         }
-        else if(operator==mul && useOtherVal){
+        else if(operator==OperationsArray.Mul.oper && useOtherVal){
             valThree*=valTwo
             valTwo=0.0
         }
@@ -189,11 +221,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun  sumAndMinus(operator:String){
         positionSum()
-        if (operator==plus){
+        if (operator==OperationsArray.Plus.oper){
             valOne+=valTwo
             valTwo=0.0
         }
-        else if(operator==minus){
+        else if(operator==OperationsArray.Minus.oper){
             valOne-=valTwo
             valTwo=0.0
         }
@@ -217,30 +249,30 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0..operationsList.size-2) {
             valTwo=numbers[i+1]
-            if(operationsList[i]==mul || operationsList[i]==div){
+            if(operationsList[i]==OperationsArray.Mul.oper || operationsList[i]==OperationsArray.Div.oper ){
                 muvAndDiv(operationsList[i])
             }
-            else if(operationsList[i+1]!=mul && operationsList[i+1]!=div && (operationsList[i]==plus || operationsList[i]==minus)){
+            else if(operationsList[i+1]!=OperationsArray.Mul.oper && operationsList[i+1]!=OperationsArray.Div.oper && (operationsList[i]==OperationsArray.Plus.oper || operationsList[i]==OperationsArray.Minus.oper)){
                 sumAndMinus(operationsList[i])
             }
-            else if((operationsList[i+1]==mul || operationsList[i+1]==div) && operationsList[i]==plus){
+            else if((operationsList[i+1]==OperationsArray.Mul.oper  || operationsList[i+1]==OperationsArray.Div.oper ) && operationsList[i]==OperationsArray.Plus.oper ){
                 valThree=valTwo
                 useOtherVal=true
                 plusNew=true
             }
-            else if((operationsList[i+1]==mul || operationsList[i+1]==div) && operationsList[i]==minus){
+            else if((operationsList[i+1]==OperationsArray.Mul.oper  || operationsList[i+1]==OperationsArray.Div.oper ) && operationsList[i]==OperationsArray.Minus.oper ){
                 valThree=valTwo
                 useOtherVal=true
                 minusNew=true
             }
 
         }
-        if(operationsList[operationsList.size-1]==plus || operationsList[operationsList.size-1]==minus){
+        if(operationsList[operationsList.size-1]==OperationsArray.Plus.oper  || operationsList[operationsList.size-1]==OperationsArray.Minus.oper ){
             valTwo=numbers[operationsList.size]
             sumAndMinus(operationsList[operationsList.size-1])
         }
 
-        else if(operationsList[operationsList.size-1]!=mul || operationsList[operationsList.size-1]!=div){
+        else if(operationsList[operationsList.size-1]!=OperationsArray.Mul.oper  || operationsList[operationsList.size-1]!=OperationsArray.Div.oper ){
             valTwo=numbers[operationsList.size]
             muvAndDiv(operationsList[operationsList.size-1])
         }
