@@ -7,12 +7,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.Button
 import androidx.constraintlayout.widget.Group
 import kotlin.math.pow
-import kotlin.math.round
 
 class MainActivity : AppCompatActivity() {
 
     private var numbers = ArrayList<Double>()
-    private var operationsList = ArrayList<String>()
+    private var operationsList = ArrayList<Operation>()
     private var ten: Double=10.0
     private var lastNumeric: Boolean = false
     private var plusMinus: Boolean = false
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var value: Double=0.0
     private var lastRandom:Boolean=false
 
-    enum class OperationsArray(val oper: String){
+    enum class Operation(val oper: String){
         Plus("+"),
         Minus("-"),
         Mul("x"),
@@ -85,11 +84,12 @@ class MainActivity : AppCompatActivity() {
                 lastNumeric=false
                 numbers.clear()
                 operationsList.clear()
-                outputTextView.append(OperationsArray.Percent.oper)
+                outputTextView.append(Operation.Percent.oper)
                 sum=false
                 lastRandom=false
             }
         }
+
         plusMinusBtn.setOnClickListener {
             if(sum){
                 lastDot=false
@@ -160,7 +160,19 @@ class MainActivity : AppCompatActivity() {
             }
             numbers.add(value)
             outputTextView.text=""
-            operationsList.add((it as Button).text.toString())
+
+            if((it as Button).text.toString()==Operation.Mul.oper){
+                operationsList.add(Operation.Mul)
+            }
+            else if((it as Button).text.toString()==Operation.Div.oper){
+                operationsList.add(Operation.Div)
+            }
+            else if((it as Button).text.toString()==Operation.Plus.oper){
+                operationsList.add(Operation.Plus)
+            }
+            else if((it as Button).text.toString()==Operation.Minus.oper){
+                operationsList.add(Operation.Minus)
+            }
             lastNumeric = false
             lastDot = false
             lastPercent=false
@@ -173,7 +185,7 @@ class MainActivity : AppCompatActivity() {
 
         commaButton.setOnClickListener {
             if(!lastDot && lastNumeric){
-                outputTextView.append(OperationsArray.Dot.oper)
+                outputTextView.append(Operation.Dot.oper)
                 lastNumeric = false
                 lastDot = true
                 colDot=1
@@ -198,34 +210,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun muvAndDiv(operator:String){
-        if (operator==OperationsArray.Mul.oper && !useOtherVal){
+    private fun muvAndDiv(operator:Operation){
+        if (operator==Operation.Mul && !useOtherVal){
             valOne*=valTwo
             valTwo=0.0
         }
-        else if(operator==OperationsArray.Div.oper && !useOtherVal){
+        else if(operator==Operation.Div && !useOtherVal){
 
             valOne/=valTwo
             valTwo=0.0
         }
-        else if(operator==OperationsArray.Div.oper && useOtherVal){
+        else if(operator==Operation.Div && useOtherVal){
             valThree/=valTwo
             valTwo=0.0
 
         }
-        else if(operator==OperationsArray.Mul.oper && useOtherVal){
+        else if(operator==Operation.Mul && useOtherVal){
             valThree*=valTwo
             valTwo=0.0
         }
     }
 
-    private fun  sumAndMinus(operator:String){
+    private fun  sumAndMinus(operator:Operation){
         positionSum()
-        if (operator==OperationsArray.Plus.oper){
+        if (operator==Operation.Plus){
             valOne+=valTwo
             valTwo=0.0
         }
-        else if(operator==OperationsArray.Minus.oper){
+        else if(operator==Operation.Minus){
             valOne-=valTwo
             valTwo=0.0
         }
@@ -249,30 +261,30 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0..operationsList.size-2) {
             valTwo=numbers[i+1]
-            if(operationsList[i]==OperationsArray.Mul.oper || operationsList[i]==OperationsArray.Div.oper ){
+            if(operationsList[i]==Operation.Mul || operationsList[i]==Operation.Div ){
                 muvAndDiv(operationsList[i])
             }
-            else if(operationsList[i+1]!=OperationsArray.Mul.oper && operationsList[i+1]!=OperationsArray.Div.oper && (operationsList[i]==OperationsArray.Plus.oper || operationsList[i]==OperationsArray.Minus.oper)){
+            else if(operationsList[i+1]!=Operation.Mul && operationsList[i+1]!=Operation.Div && (operationsList[i]==Operation.Plus || operationsList[i]==Operation.Minus)){
                 sumAndMinus(operationsList[i])
             }
-            else if((operationsList[i+1]==OperationsArray.Mul.oper  || operationsList[i+1]==OperationsArray.Div.oper ) && operationsList[i]==OperationsArray.Plus.oper ){
+            else if((operationsList[i+1]==Operation.Mul  || operationsList[i+1]==Operation.Div ) && operationsList[i]==Operation.Plus ){
                 valThree=valTwo
                 useOtherVal=true
                 plusNew=true
             }
-            else if((operationsList[i+1]==OperationsArray.Mul.oper  || operationsList[i+1]==OperationsArray.Div.oper ) && operationsList[i]==OperationsArray.Minus.oper ){
+            else if((operationsList[i+1]==Operation.Mul  || operationsList[i+1]==Operation.Div ) && operationsList[i]==Operation.Minus){
                 valThree=valTwo
                 useOtherVal=true
                 minusNew=true
             }
 
         }
-        if(operationsList[operationsList.size-1]==OperationsArray.Plus.oper  || operationsList[operationsList.size-1]==OperationsArray.Minus.oper ){
+        if(operationsList[operationsList.size-1]==Operation.Plus  || operationsList[operationsList.size-1]==Operation.Minus ){
             valTwo=numbers[operationsList.size]
             sumAndMinus(operationsList[operationsList.size-1])
         }
 
-        else if(operationsList[operationsList.size-1]!=OperationsArray.Mul.oper  || operationsList[operationsList.size-1]!=OperationsArray.Div.oper ){
+        else if(operationsList[operationsList.size-1]!=Operation.Mul  || operationsList[operationsList.size-1]!=Operation.Div ){
             valTwo=numbers[operationsList.size]
             muvAndDiv(operationsList[operationsList.size-1])
         }
